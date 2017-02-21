@@ -85,6 +85,9 @@ config.namespace = SomeModule
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/rzane/magic_models.
 
+## Props
+
++ [Dr. Nic's Magic Models](https://github.com/drnic/dr-nic-magic-models)
 
 ## License
 
