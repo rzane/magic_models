@@ -4,13 +4,13 @@ module MagicModels
   class Configuration
     attr_accessor :bind_to, :connection, :destination
 
-    delegate :data_sources, to: :connection
+    delegate :primary_key, :foreign_keys, to: :connection
 
     def initialize
-      @exclude = []
       @bind_to = TOPLEVEL_BINDING
       @connection = ActiveRecord::Base.connection
       @destination = File.join(Dir.pwd, 'app', 'models')
+      @exclude = ['schema_migrations', 'ar_internal_metadata']
     end
 
     def exclude(*tables)

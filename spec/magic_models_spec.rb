@@ -1,11 +1,9 @@
 require "spec_helper"
 
 RSpec.describe MagicModels do
-  around do |example|
-    conn = ActiveRecord::Base.connection
-    conn.execute 'create table foos (id integer);'
-    example.run
-    conn.execute 'drop table foos;'
+  after do
+    hide_const 'Foo'
+    hide_const 'Bar'
   end
 
   it 'generates a model' do
@@ -23,5 +21,10 @@ RSpec.describe MagicModels do
 
     contents = File.read(File.join(dir, 'foo.rb'))
     expect(contents).to match(/class Foo < ActiveRecord::Base/)
+  end
+
+  it 'defines associations' do
+    MagicModels.define
+    expect(Bar.reflect_on_association(:foo)).not_to be_nil
   end
 end

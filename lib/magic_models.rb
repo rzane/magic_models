@@ -21,4 +21,3 @@ module MagicModels
     end
   end
 end
-

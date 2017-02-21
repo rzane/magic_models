@@ -1,11 +1,7 @@
 require 'bundler/setup'
 require 'magic_models'
 require 'pry'
-
-ActiveRecord::Base.establish_connection(
-  adapter: 'sqlite3',
-  database: ':memory:'
-)
+require_relative 'schema'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

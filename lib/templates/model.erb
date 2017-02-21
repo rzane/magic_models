@@ -1,2 +1,10 @@
 class <%= model_name %> < ActiveRecord::Base
+  self.table_name = <%= name.inspect %>
+  self.primary_key = :<%= primary_key %>
+<% associations.each do |association| %>
+  <%= association.macro %> :<%= association.name %>,
+    class_name: <%= association.class_name.inspect %>,
+    foreign_key: :<%= association.foreign_key %>,
+    primary_key: :<%= association.primary_key %>
+<% end %>
 end
