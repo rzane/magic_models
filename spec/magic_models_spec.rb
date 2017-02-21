@@ -12,6 +12,11 @@ RSpec.describe MagicModels do
     expect(Foo.count).to eq(0)
   end
 
+  it 'returns the models that were defined' do
+    models = MagicModels.define
+    expect(models).to eq([Foo, Bar])
+  end
+
   it 'dumps a model' do
     dir = Dir.mktmpdir 'magic_models'
 

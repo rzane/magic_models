@@ -23,8 +23,9 @@ module MagicModels
     end
 
     def define
-      models.each do |model|
+      models.map do |model|
         config.bind_to.eval(model.render)
+        model.constantize
       end
     end
   end

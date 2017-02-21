@@ -28,6 +28,7 @@ module MagicModels
     def model_name
       name.singularize.camelize
     end
+    delegate :constantize, to: :model_name
 
     def render
       ERB.new(File.read(template)).result(binding)

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe MagicModels::Model do
   let(:config) { MagicModels::Configuration.new }
+
   it 'renders properly' do
     model = described_class.new(config, 'bars')
 
