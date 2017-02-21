@@ -41,7 +41,7 @@ $ rails runner 'MagicModels.dump'
 
 ## Configuration
 
-MagicModels also offers some configuration settings:
+MagicModels also offers some configuration settings. `MagicModels.define` and `MagicModels.dump` accept a block:
 
 ```ruby
 MagicModels.define do |config|
