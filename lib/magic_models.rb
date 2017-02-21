@@ -1,23 +1,18 @@
 require 'magic_models/version'
-require 'magic_models/configuration'
-require 'magic_models/generator'
+require 'magic_models/schema'
 
 module MagicModels
   class << self
-    def define(&block)
-      conceptualize(&block).define
+    def define
+      schema = Schema::Define.new
+      yield schema if block_given?
+      schema.models.map(&:define)
     end
 
     def dump(&block)
-      conceptualize(&block).dump
-    end
-
-    private
-
-    def conceptualize
-      config = Configuration.new
-      yield config if block_given?
-      Generator.new(config)
+      schema = Schema::Dump.new
+      yield schema if block_given?
+      schema.models.map(&:write)
     end
   end
 end

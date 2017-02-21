@@ -2,6 +2,8 @@
 
 Have an existing database? MagicModels can generate models on the fly using your existing database connection.
 
+If you have a table called `people`, just call `MagicModels.define`. Now, you have a model called `Person`. Boom!
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -45,32 +47,43 @@ MagicModels also offers some configuration settings. `MagicModels.define` and `M
 
 ```ruby
 MagicModels.define do |config|
-  # Ignore certian tables (default: schema_migrations, ar_internal_metadata)
-  config.exclude 'some_table', 'some_other_table'
+end
 
-  # Change the dump directory (default: app/models)
-  config.destination = '/path/to/your/directory'
-
-  # Change the connection (default: ActiveRecord::Base.connection)
-  config.connection = SomeOtherModel.connection
-
-  # Declare the models within a namespace
-  config.namespace = SomeModule
-
-  # Declare a different class to inherit from (default: ActiveRecord::Base)
-  config.base_class = 'SomeOtherAncestor'
+MagicModels.dump do |config|
 end
 ```
 
-## Development
+#### Shared settings
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+# Ignore certian tables (default: schema_migrations, ar_internal_metadata)
+config.exclude 'some_table', 'some_other_table'
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+# Change the connection (default: ActiveRecord::Base.connection)
+config.connection = SomeOtherModel.connection
+
+# Declare a different class to inherit from (default: ActiveRecord::Base)
+config.base_class = 'SomeOtherAncestor'
+```
+
+#### Dump-specific settings
+
+```ruby
+# Change the directory where the model files will be created (default: app/models)
+config.destination = '/path/to/your/models/dir'
+```
+
+#### Define-specific settings
+
+```ruby
+# Change the namespace to create the models under. For example, if you had a table
+# named 'foos', this configuration would create `SomeModule::Foo` instead of `Foo`.
+config.namespace = SomeModule
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/Ray Zane/magic_models.
+Bug reports and pull requests are welcome on GitHub at https://github.com/rzane/magic_models.
 
 
 ## License

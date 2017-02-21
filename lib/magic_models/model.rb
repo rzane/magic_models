@@ -3,37 +3,50 @@ require 'magic_models/associations'
 
 module MagicModels
   class Model
-    attr_reader :config, :name
+    attr_reader :schema, :name
 
-    delegate :base_class, to: :config
+    delegate :base_class, to: :schema
     delegate :constantize, to: :model_name
 
-    def initialize(config, name)
-      @config = config
+    def initialize(schema, name)
+      @schema = schema
       @name   = name
     end
 
-    def primary_key
-      @primary_key ||= config.primary_key(name)
-    end
-
     def filename
-      File.join(config.destination, "#{model_name.underscore}.rb")
-    end
-
-    def belongs_to
-      config.foreign_keys(name).map do |fk|
-        Associations::BelongsTo.new(fk)
-      end
-    end
-    alias associations belongs_to
-
-    def model_name
-      name.singularize.camelize
+      File.join(schema.destination, "#{model_name.underscore}.rb")
     end
 
     def render
       ERB.new(File.read(template)).result(binding)
+    end
+
+    def write
+      File.open(filename, 'w') { |f| f.write render }
+      filename
+    end
+
+    def define
+      schema.evaluate(render)
+      constantize
+    end
+
+    def primary_key
+      @primary_key ||= schema.primary_key(name)
+    end
+
+    def belongs_to
+      schema.foreign_keys(name).map do |fk|
+        Associations::BelongsTo.new(fk)
+      end
+    end
+
+    # Currently, we only support belongs_to associations. I don't think
+    # there is a way to differentiate a has_one from a has_many.
+    alias associations belongs_to
+
+    def model_name
+      name.singularize.camelize
     end
 
     private

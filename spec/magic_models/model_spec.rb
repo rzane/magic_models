@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe MagicModels::Model do
-  let(:config) { MagicModels::Configuration.new }
+  let(:schema) { MagicModels::Schema::Define.new }
 
   it 'renders properly' do
-    model = described_class.new(config, 'bars')
+    model = described_class.new(schema, 'bars')
 
     expect(model.render).to match(<<~EOMODEL)
     class Bar < ActiveRecord::Base
