@@ -1,4 +1,4 @@
-class <%= model_name %> < ActiveRecord::Base
+class <%= model_name %> < <%= base_class %>
   self.table_name = <%= name.inspect %>
   self.primary_key = :<%= primary_key %>
 <% associations.each do |association| %>

@@ -2,12 +2,12 @@ require 'active_record'
 
 module MagicModels
   class Configuration
-    attr_accessor :bind_to, :connection, :destination
+    attr_accessor :base_class, :namespace, :connection, :destination
 
     delegate :primary_key, :foreign_keys, to: :connection
 
     def initialize
-      @bind_to = TOPLEVEL_BINDING
+      @base_class = 'ActiveRecord::Base'
       @connection = ActiveRecord::Base.connection
       @destination = File.join(Dir.pwd, 'app', 'models')
       @exclude = ['schema_migrations', 'ar_internal_metadata']
@@ -19,6 +19,14 @@ module MagicModels
 
     def data_sources
       connection.data_sources - @exclude
+    end
+
+    def evaluate(*args, &block)
+      if namespace
+        namespace.module_eval(*args, &block)
+      else
+        TOPLEVEL_BINDING.eval(*args, &block)
+      end
     end
   end
 end

@@ -24,7 +24,7 @@ module MagicModels
 
     def define
       models.map do |model|
-        config.bind_to.eval(model.render)
+        config.evaluate(model.render)
         model.constantize
       end
     end

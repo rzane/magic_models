@@ -5,6 +5,9 @@ module MagicModels
   class Model
     attr_reader :config, :name
 
+    delegate :base_class, to: :config
+    delegate :constantize, to: :model_name
+
     def initialize(config, name)
       @config = config
       @name   = name
@@ -28,7 +31,6 @@ module MagicModels
     def model_name
       name.singularize.camelize
     end
-    delegate :constantize, to: :model_name
 
     def render
       ERB.new(File.read(template)).result(binding)
