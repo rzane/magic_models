@@ -18,7 +18,8 @@ module MagicModels
     end
 
     def render
-      ERB.new(File.read(template)).result(binding)
+      erb = ERB.new(template, nil, '<>')
+      erb.result(binding)
     end
 
     def write
@@ -29,6 +30,10 @@ module MagicModels
     def define
       schema.evaluate(render)
       constantize
+    end
+
+    def appends
+      schema.appends[name]
     end
 
     def primary_key
@@ -52,6 +57,10 @@ module MagicModels
     private
 
     def template
+      @template ||= File.read(template_filename)
+    end
+
+    def template_filename
       File.expand_path('../../templates/model.erb', __FILE__)
     end
   end

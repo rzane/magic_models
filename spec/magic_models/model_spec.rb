@@ -3,6 +3,11 @@ require 'spec_helper'
 RSpec.describe MagicModels::Model do
   let(:schema) { MagicModels::Schema::Define.new }
 
+  before do
+    schema.append 'bars', 'blah'
+    schema.append 'bars', 'deet'
+  end
+
   it 'renders properly' do
     model = described_class.new(schema, 'bars')
 
@@ -16,6 +21,8 @@ RSpec.describe MagicModels::Model do
         foreign_key: :foo_id,
         primary_key: :id
 
+      blah
+      deet
     end
     EOMODEL
   end

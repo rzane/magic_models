@@ -17,16 +17,6 @@ RSpec.describe MagicModels do
       expect(Foo.count).to eq(0)
     end
 
-    it 'returns the models that were defined' do
-      models = MagicModels.define
-      expect(models).to match_array([Foo, Bar])
-    end
-
-    it 'defines associations' do
-      MagicModels.define
-      expect(Bar.reflect_on_association(:foo)).not_to be_nil
-    end
-
     it 'can bind to a namespace' do
       expect { MMExampleNamespace::Foo }.to raise_error(NameError)
 
@@ -36,20 +26,25 @@ RSpec.describe MagicModels do
 
       expect(MMExampleNamespace::Foo.count).to eq(0)
     end
+
+    it 'returns the models that were defined' do
+      models = MagicModels.define
+      expect(models).to match_array([Foo, Bar])
+    end
   end
 
   describe '.dump' do
     let(:dir) { Dir.mktmpdir 'magic_models' }
 
     it 'dumps a model' do
-      dir = Dir.mktmpdir 'magic_models'
-
-      MagicModels.dump do |config|
-        config.destination = dir
-      end
-
+      MagicModels.dump { |c| c.destination = dir }
       contents = File.read(File.join(dir, 'foo.rb'))
       expect(contents).to match(/class Foo < ActiveRecord::Base/)
+    end
+
+    it 'returns the filenames that were created' do
+      result = MagicModels.dump { |c| c.destination = dir }
+      expect(result.grep(/foo|bar\.rb$/).length).to eq(2)
     end
   end
 end

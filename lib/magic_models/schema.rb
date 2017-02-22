@@ -4,6 +4,7 @@ require 'magic_models/model'
 module MagicModels
   module Schema
     class Base
+      attr_reader :appends
       attr_accessor :base_class, :connection
       delegate :primary_key, :foreign_keys, to: :connection
 
@@ -11,10 +12,17 @@ module MagicModels
         @base_class = 'ActiveRecord::Base'
         @connection = ActiveRecord::Base.connection
         @exclude = ['schema_migrations', 'ar_internal_metadata']
+        @appends = Hash.new do |hsh, key|
+          hsh[key] = []
+        end
       end
 
       def exclude(*tables)
         @exclude += tables.flatten
+      end
+
+      def append(table_name, content)
+        appends[table_name] << content
       end
 
       def data_sources
